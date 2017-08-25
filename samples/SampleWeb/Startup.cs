@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -22,7 +20,7 @@ namespace SampleWeb
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
             app.Run(async (context) =>
             {
                 await context.Response.WriteAsync("Hello World!");

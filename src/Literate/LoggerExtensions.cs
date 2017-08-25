@@ -23,8 +23,8 @@ namespace Es.Serilog.Lite
         /// <param name="environmentName">Production|Staging|Development</param>
         /// <param name="skipMicrosoftLog">Skip Microsoft logs and so log only own logs</param>
         /// <returns><see cref="LoggerConfiguration"/></returns>
-        public static LoggerConfiguration ConfigueAll(this LoggerConfiguration configuration, 
-            string environmentName = "Production", 
+        public static LoggerConfiguration ConfigueAll(this LoggerConfiguration configuration,
+            string environmentName = "Production",
             bool skipMicrosoftLog = true)
         {
             configuration = configuration

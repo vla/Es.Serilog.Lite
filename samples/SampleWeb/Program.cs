@@ -1,18 +1,15 @@
-﻿using System;
-using Microsoft.AspNetCore;
+﻿using System.IO;
+using System.Reflection;
+using Es.Serilog.Lite;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Es.Serilog.Lite;
-using System.IO;
-using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using System.Net;
 
 namespace SampleWeb
 {
-    class Program
+    internal class Program
     {
         public static void Main(string[] args)
         {
@@ -52,7 +49,6 @@ namespace SampleWeb
                      {
                          config.AddCommandLine(args);
                      }
-
                  })
                  .ConfigureLogging((hostingContext, logging) =>
                  {
