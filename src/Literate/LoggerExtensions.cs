@@ -29,8 +29,8 @@ namespace Es.Serilog.Lite
         {
             configuration = configuration
                 .Configue()
-                .WriteTo.Async(async => async.ConfigueStd().WriteTo.ConfigueRollingFile())
-                .ConfigueLevel(environmentName);
+                .ConfigueLevel(environmentName)
+                .WriteTo.Async(async => async.ConfigueStd().WriteTo.ConfigueRollingFile());
             if (skipMicrosoftLog)
                 return configuration.ConfigueSkipMicrosoftLog();
             return configuration;

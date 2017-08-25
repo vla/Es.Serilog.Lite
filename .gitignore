@@ -56,5 +56,6 @@ $RECYCLE.BIN/
 ####################
 
 .vs/
+artifacts/
 samples/SampleWeb/logs
 .nuget/
