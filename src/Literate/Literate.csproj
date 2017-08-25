@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Easy log usage</Description>
+    <Description>Easy Serilog usage</Description>
     <AssemblyTitle>Es.Serilog.Lite</AssemblyTitle>
     <AssemblyName>Es.Serilog.Lite</AssemblyName>
     <RootNamespace>Es.Serilog.Lite</RootNamespace>
