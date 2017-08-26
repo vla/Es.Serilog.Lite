@@ -58,4 +58,5 @@ $RECYCLE.BIN/
 .vs/
 artifacts/
 samples/SampleWeb/logs
+samples/SampleApp/logs
 .nuget/

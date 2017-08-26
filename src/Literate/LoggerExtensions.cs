@@ -1,19 +1,23 @@
 ﻿using System;
 using System.IO;
-using Serilog;
+using Es.Serilog.Lite;
 using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace Es.Serilog.Lite
+namespace Serilog
 {
     /// <summary>
     /// Serilog Extensions
     /// </summary>
     public static class LoggerExtensions
     {
-        private const string DefaultOutputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss}] ({MachineName}) {Level:w} {Logger} {Message}{NewLine}{Exception}";
+        /// <summary>
+        /// Default OutputTemplate
+        /// </summary>
+        public const string DefaultOutputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss}] ({MachineName}) {Level:w} {Logger} {Message}{NewLine}{Exception}";
+
         private const string DefaultFilter = "\"Microsoft";
 
         /// <summary>
@@ -30,7 +34,11 @@ namespace Es.Serilog.Lite
             configuration = configuration
                 .Configue()
                 .ConfigueLevel(environmentName)
-                .WriteTo.Async(async => async.ConfigueStd().WriteTo.ConfigueRollingFile());
+                .WriteTo.Async(async =>
+                {
+                    async.ConfigueStd();
+                    async.ConfigueRollingFile();
+                });
             if (skipMicrosoftLog)
                 return configuration.ConfigueSkipMicrosoftLog();
             return configuration;
