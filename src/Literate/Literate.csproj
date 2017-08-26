@@ -6,9 +6,9 @@
     <AssemblyName>Es.Serilog.Lite</AssemblyName>
     <RootNamespace>Es.Serilog.Lite</RootNamespace>
     <VersionPrefix>0.0.1</VersionPrefix>
-    <VersionSuffix>beta1</VersionSuffix>
+    <VersionSuffix>beta2</VersionSuffix>
     <Authors>v.la@live.cn</Authors>
-    <TargetFrameworks>netstandard1.3;netstandard2.0;</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3;netstandard2.0;net45;</TargetFrameworks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <DebugType>portable</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
