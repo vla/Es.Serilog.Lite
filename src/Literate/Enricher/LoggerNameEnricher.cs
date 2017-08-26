@@ -1,7 +1,7 @@
 ﻿using Serilog.Core;
 using Serilog.Events;
 
-namespace Es.Serilog.Lite
+namespace Es.Serilog.Lite.Enricher
 {
     /// <summary>
     /// LoggerNameEnricher

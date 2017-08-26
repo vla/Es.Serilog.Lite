@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Es.Serilog.Lite;
+using Es.Serilog.Lite.Enricher;
 using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
