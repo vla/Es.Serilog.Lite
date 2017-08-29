@@ -121,7 +121,13 @@ namespace Serilog
             string pathFormat = null)
         {
             return configuration.RollingFile(
-                pathFormat: pathFormat ?? "logs" + Path.DirectorySeparatorChar + "{Date}.log",
+                pathFormat: pathFormat ?? Path.Combine(
+#if NET45
+                    AppDomain.CurrentDomain.BaseDirectory
+#else
+                    AppContext.BaseDirectory
+#endif
+                    , "logs", "{Date}.log"),
                 shared: shared,
                 buffered: buffered,
                 restrictedToMinimumLevel: restrictedToMinimumLevel,
