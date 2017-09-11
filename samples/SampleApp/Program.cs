@@ -3,11 +3,12 @@ using Serilog;
 
 namespace SampleApp
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var environmentName = "Development";
+
             Log.Logger = new LoggerConfiguration()
                 .Configue()
                 .ConfigueLevel(environmentName)
@@ -17,7 +18,6 @@ namespace SampleApp
                     async.ConfigueRollingFile();
                 })
                 .CreateLogger();
-
 
             for (int i = 0; i < 50; i++)
             {
@@ -37,7 +37,6 @@ namespace SampleApp
             catch (Exception ex)
             {
                 Log.Error(ex, "Something went wrong");
-
             }
             Console.Read();
         }

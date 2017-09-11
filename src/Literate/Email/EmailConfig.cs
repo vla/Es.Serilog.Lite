@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if NETSTANDARD2_0 || NET45
 using System.Net;
 
 namespace Es.Serilog.Lite.Email
@@ -89,4 +88,3 @@ namespace Es.Serilog.Lite.Email
         public bool IsBodyHtml { get; set; }
     }
 }
-#endif

@@ -5,7 +5,7 @@
     <AssemblyTitle>Es.Serilog.Lite</AssemblyTitle>
     <AssemblyName>Es.Serilog.Lite</AssemblyName>
     <RootNamespace>Es.Serilog.Lite</RootNamespace>
-    <VersionPrefix>0.0.1</VersionPrefix>
+    <VersionPrefix>0.0.2</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <Authors>v.la@live.cn</Authors>
     <TargetFrameworks>netstandard1.3;netstandard2.0;net45;</TargetFrameworks>
@@ -28,6 +28,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="1.18.1.1" />
     <PackageReference Include="Serilog" Version="2.5.0" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.2" />
     <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.1.1" />
