@@ -4,6 +4,7 @@ using Es.Serilog.Lite.Enricher;
 using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
+using Serilog.Formatting;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Serilog
@@ -98,6 +99,27 @@ namespace Serilog
         }
 
         /// <summary>
+        /// Configure standard input/output
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="formatter"></param>
+        /// <param name="restrictedToMinimumLevel"></param>
+        /// <param name="stdErrorFromLevel"></param>
+        /// <returns><see cref="LoggerConfiguration"/></returns>
+        public static LoggerConfiguration ConfigueStd(this LoggerSinkConfiguration configuration,
+            ITextFormatter formatter,
+            LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
+            LogEventLevel? stdErrorFromLevel = null
+           )
+        {
+            return configuration.Console(
+                formatter,
+                restrictedToMinimumLevel,
+                null,
+                stdErrorFromLevel);
+        }
+
+        /// <summary>
         /// Configure RollingFile
         /// </summary>
         /// <param name="configuration"></param>
@@ -135,6 +157,46 @@ namespace Serilog
                 retainedFileCountLimit: retainedFileCountLimit,
                 fileSizeLimitBytes: fileSizeLimitBytes,
                 outputTemplate: outputTemplate);
+        }
+
+        /// <summary>
+        /// Configure RollingFile
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="formatter"></param>
+        /// <param name="shared"></param>
+        /// <param name="buffered"></param>
+        /// <param name="retainedFileCountLimit"></param>
+        /// <param name="fileSizeLimitBytes"></param>
+        /// <param name="restrictedToMinimumLevel"></param>
+        /// <param name="formatProvider"></param>
+        /// <param name="pathFormat"></param>
+        /// <returns><see cref="LoggerConfiguration"/></returns>
+        public static LoggerConfiguration ConfigueRollingFile(this LoggerSinkConfiguration configuration,
+            ITextFormatter formatter,
+            bool shared = true,
+            bool buffered = false,
+            int retainedFileCountLimit = 31,
+            int fileSizeLimitBytes = 1073741824,
+            LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
+            IFormatProvider formatProvider = null,
+            string pathFormat = null)
+        {
+            return configuration.RollingFile(formatter,
+                                pathFormat ?? Path.Combine(
+#if NET45
+                    AppDomain.CurrentDomain.BaseDirectory
+#else
+                    AppContext.BaseDirectory
+#endif
+                    , "logs", "{Date}.log"),
+                    restrictedToMinimumLevel,
+                    fileSizeLimitBytes,
+                    retainedFileCountLimit,
+                    shared: shared,
+                    buffered: buffered
+
+                );
         }
 
         /// <summary>
