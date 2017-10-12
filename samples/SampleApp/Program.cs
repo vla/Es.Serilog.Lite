@@ -1,6 +1,6 @@
 ﻿using System;
 using Serilog;
-using Serilog.Formatting.Compact;
+using Serilog.Formatting.Json;
 
 namespace SampleApp
 {
@@ -15,8 +15,8 @@ namespace SampleApp
                 .ConfigueLevel(environmentName)
                 .WriteTo.Async(async =>
                 {
-                    async.ConfigueStd(new CompactJsonFormatter());
-                    async.ConfigueRollingFile(new CompactJsonFormatter());
+                    async.ConfigueStd(new JsonFormatter());
+                    async.ConfigueRollingFile(new JsonFormatter());
                 })
                 .CreateLogger();
 
