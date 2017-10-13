@@ -2,7 +2,7 @@
 
 Easy Serilog usage
 
-[Sample] (https://github.com/vla/Es.Serilog.Lite/tree/master/samples/SampleWeb)easy work!
+[Sample](https://github.com/vla/Es.Serilog.Lite/tree/master/samples/SampleWeb) easy work!
 
 Packages & Status
 ---
