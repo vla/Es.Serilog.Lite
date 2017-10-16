@@ -15,7 +15,7 @@ namespace SampleApp
                 .ConfigueLevel(environmentName)
                 .WriteTo.Async(async =>
                 {
-                    async.ConfigueStd(new JsonFormatter());
+                    async.ConfigueStd();
                     async.ConfigueRollingFile(new JsonFormatter());
                 })
                 .CreateLogger();
@@ -24,6 +24,8 @@ namespace SampleApp
             {
                 Log.Debug("Warning!!!");
             }
+
+            Log.ForContext<Program>().Information("okoko");
 
             Log.Warning("LogWarning");
             Log.Error("LogError");

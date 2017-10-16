@@ -17,7 +17,7 @@ namespace Serilog
         /// <summary>
         /// Default OutputTemplate
         /// </summary>
-        public const string DefaultOutputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss}] ({MachineName}) {Level:w} {Logger} {Message}{NewLine}{Exception}";
+        public const string DefaultOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {MachineName} {Level:w} {SourceContext} {Message}{NewLine}{Exception}";
 
         private const string DefaultFilter = "\"Microsoft";
 
@@ -54,8 +54,7 @@ namespace Serilog
         {
             return configuration
                 .Enrich.WithMachineName()
-                .Enrich.FromLogContext()
-                .Enrich.With<LoggerNameEnricher>();
+                .Enrich.FromLogContext();
         }
 
         /// <summary>
