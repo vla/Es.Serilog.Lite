@@ -16,7 +16,7 @@ namespace Serilog
         /// <summary>
         /// Default OutputTemplate
         /// </summary>
-        public const string DefaultOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {MachineName} {Level:w} {SourceContext} {Message}{NewLine}{Exception}";
+        public const string DefaultOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level:w} {SourceContext} {Message}{NewLine}{Exception}";
 
         private const string DefaultFilter = "\"Microsoft";
 

@@ -1,6 +1,6 @@
 ﻿using System;
+using Es.Serilog.Lite.Formatting;
 using Serilog;
-using Serilog.Formatting.Json;
 
 namespace SampleApp
 {
@@ -15,12 +15,12 @@ namespace SampleApp
                 .ConfigueLevel(environmentName)
                 .WriteTo.Async(async =>
                 {
-                    async.ConfigueStd();
+                    async.ConfigueStd(new JsonFormatter());
                     async.ConfigueRollingFile(new JsonFormatter());
                 })
                 .CreateLogger();
 
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 1; i++)
             {
                 Log.Debug("Warning!!!");
             }
