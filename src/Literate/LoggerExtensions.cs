@@ -52,7 +52,6 @@ namespace Serilog
         public static LoggerConfiguration Configue(this LoggerConfiguration configuration)
         {
             return configuration
-                .Enrich.WithMachineName()
                 .Enrich.FromLogContext();
         }
 
