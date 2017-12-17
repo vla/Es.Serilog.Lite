@@ -11,7 +11,7 @@ namespace Serilog
     /// <summary>
     /// Serilog Extensions
     /// </summary>
-    public static class LoggerExtensions
+    public static class SerilogExtensions
     {
         /// <summary>
         /// Default OutputTemplate
