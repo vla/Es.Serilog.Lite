@@ -45,6 +45,30 @@ namespace Serilog
         }
 
         /// <summary>
+        /// Configue All
+        /// </summary>
+        /// <param name="configuration"><see cref="LoggerConfiguration"/></param>
+        /// <param name="minLevel"><see cref="LogEventLevel"/></param>
+        /// <param name="skipMicrosoftLog">Skip Microsoft logs and so log only own logs</param>
+        /// <returns><see cref="LoggerConfiguration"/></returns>
+        public static LoggerConfiguration ConfigueAll(this LoggerConfiguration configuration,
+            LogEventLevel minLevel = LevelAlias.Minimum,
+            bool skipMicrosoftLog = true)
+        {
+            configuration = configuration
+                .Configue()
+                .ConfigueLevel(minLevel)
+                .WriteTo.Async(async =>
+                {
+                    async.ConfigueStd();
+                    async.ConfigueRollingFile();
+                });
+            if (skipMicrosoftLog)
+                return configuration.ConfigueSkipMicrosoftLog();
+            return configuration;
+        }
+
+        /// <summary>
         /// Configue Default
         /// </summary>
         /// <param name="configuration"><see cref="LoggerConfiguration"/></param>
@@ -216,6 +240,31 @@ namespace Serilog
             {
                 //Staging
                 return configuration.MinimumLevel.Debug();
+            }
+        }
+
+        /// <summary>
+        /// Configuration log level
+        /// </summary>
+        /// <param name="configuration"><see cref="LoggerConfiguration"/></param>
+        /// <param name="minLevel"><see cref="LogEventLevel"/></param>
+        /// <returns><see cref="LoggerConfiguration"/></returns>
+        public static LoggerConfiguration ConfigueLevel(this LoggerConfiguration configuration, LogEventLevel minLevel = LevelAlias.Minimum)
+        {
+           switch(minLevel)
+            {
+                case LogEventLevel.Fatal:
+                    return configuration.MinimumLevel.Fatal();
+                case LogEventLevel.Error:
+                    return configuration.MinimumLevel.Error();
+                case LogEventLevel.Warning:
+                    return configuration.MinimumLevel.Warning();
+                case LogEventLevel.Information:
+                    return configuration.MinimumLevel.Information();
+                case LogEventLevel.Debug:
+                    return configuration.MinimumLevel.Debug();
+                default:
+                    return configuration.MinimumLevel.Verbose();
             }
         }
     }
