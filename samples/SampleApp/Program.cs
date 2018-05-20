@@ -1,4 +1,5 @@
 ﻿using System;
+using Es.Serilog.Lite;
 using Es.Serilog.Lite.Formatting;
 using Serilog;
 
@@ -8,17 +9,7 @@ namespace SampleApp
     {
         private static void Main(string[] args)
         {
-            var environmentName = "Development";
-
-            Log.Logger = new LoggerConfiguration()
-                .Configue()
-                .ConfigueLevel(environmentName)
-                .WriteTo.Async(async =>
-                {
-                    async.ConfigueStd(new JsonFormatter());
-                    async.ConfigueRollingFile(new JsonFormatter());
-                })
-                .CreateLogger();
+            Log.Logger = LogBuilder.Create();
 
             for (int i = 0; i < 1; i++)
             {
