@@ -33,11 +33,25 @@ namespace Es.Serilog.Lite
         /// <returns></returns>
         public static ILogger Create(SerilogOptions serilogOptions, string environmentName)
         {
-            switch (environmentName)
+            if (serilogOptions == null)
             {
-                case "Production": serilogOptions.LogMinLevel = "Information"; break;
-                case "Staging": serilogOptions.LogMinLevel = "Debug"; break;
-                default: serilogOptions.LogMinLevel = "Verbose"; break;
+                serilogOptions = new SerilogOptions();
+            }
+
+            if (string.IsNullOrWhiteSpace(serilogOptions.LogMinLevel))
+            {
+                switch (environmentName)
+                {
+                    case "Production":
+                        serilogOptions.LogMinLevel = "Information";
+                        break;
+                    case "Staging":
+                        serilogOptions.LogMinLevel = "Debug";
+                        break;
+                    default:
+                        serilogOptions.LogMinLevel = "Verbose";
+                        break;
+                }
             }
 
             return Create(serilogOptions);
