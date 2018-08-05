@@ -1,4 +1,5 @@
 ﻿using Es.Serilog.Lite.Email;
+using Serilog.Events;
 
 namespace Es.Serilog.Lite
 {
@@ -20,7 +21,13 @@ namespace Es.Serilog.Lite
         /// <summary>
         /// Whether to filter Microsoft logs.
         /// </summary>
+        [System.Obsolete("Use SourceContextFilterOptions")]
         public bool SkipMicrosoftLog { get; set; }
+
+        /// <summary>
+        /// Gets or sets the source context filter options.
+        /// </summary>
+        public SourceContextFilterOptions SourceContextFilterOptions { get; set; }
 
         /// <summary>
         /// Whether to enable file records.
@@ -45,7 +52,7 @@ namespace Es.Serilog.Lite
         /// <summary>
         /// Minimum log level
         /// </summary>
-        public string LogMinLevel { get; set; }
+        public LogEventLevel? LogMinLevel { get; set; }
 
         /// <summary>
         /// Gets or sets the email configuration.

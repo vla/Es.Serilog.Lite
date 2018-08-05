@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Events;
 
 namespace SampleWeb
 {
@@ -54,11 +55,28 @@ namespace SampleWeb
                  {
                      logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
 
-                     Log.Logger = new LoggerConfiguration()
-                     .ConfigueAll(hostingContext.HostingEnvironment.EnvironmentName)
-                     .CreateLogger();
+                     var options = hostingContext.Configuration.GetSection("Serilog").Get<SerilogOptions>();
+
+                     if(options == null)
+                     {
+                         options = new SerilogOptions
+                         {
+                             StdOut = true,
+                             LogMinLevel = LogEventLevel.Debug,
+                             SourceContextFilterOptions = new SourceContextFilterOptions
+                             {
+                                 MinLevel = LogEventLevel.Warning,
+                                 Rules = new[] {
+                                  new SourceContextFilterRule { LogLevel = LogEventLevel.Warning, SourceContextName = "Microsoft" }
+                             }
+                             }
+                         };
+                     }
+
+                     Log.Logger = LogBuilder.Create(options);
 
                      Log.Information("Getting the motors running...");
+
                      logging.AddSerilog(logger: Log.Logger, dispose: true);
                  })
                  .UseIISIntegration()

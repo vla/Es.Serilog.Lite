@@ -11,6 +11,7 @@ namespace SampleWeb
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -21,27 +22,7 @@ namespace SampleWeb
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-
-                var log = context.RequestServices.GetRequiredService<ILogger<Startup>>();
-
-                log.LogWarning("LogWarning");
-                log.LogError("LogError");
-                log.LogCritical("LogCritical");
-
-                int a = 10, b = 0;
-                try
-                {
-                    log.LogDebug("Dividing {A} by {B}", a, b);
-                    Console.WriteLine(a / b);
-                }
-                catch (Exception ex)
-                {
-                    log.LogError(ex, "Something went wrong");
-                }
-            });
+            app.UseMvc();
         }
     }
 }

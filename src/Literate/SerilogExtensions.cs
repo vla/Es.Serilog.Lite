@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Es.Serilog.Lite;
 using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
@@ -18,7 +20,7 @@ namespace Serilog
         /// </summary>
         public const string DefaultOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level:w} {SourceContext} {Message}{NewLine}{Exception}";
 
-        private const string DefaultFilter = "\"Microsoft";
+        private const string DefaultFilter = "Microsoft";
 
         /// <summary>
         /// Configue All
@@ -27,6 +29,7 @@ namespace Serilog
         /// <param name="environmentName">Production|Staging|Development</param>
         /// <param name="skipMicrosoftLog">Skip Microsoft logs and so log only own logs</param>
         /// <returns><see cref="LoggerConfiguration"/></returns>
+        [Obsolete()]
         public static LoggerConfiguration ConfigueAll(this LoggerConfiguration configuration,
             string environmentName = "Production",
             bool skipMicrosoftLog = true)
@@ -51,6 +54,7 @@ namespace Serilog
         /// <param name="minLevel"><see cref="LogEventLevel"/></param>
         /// <param name="skipMicrosoftLog">Skip Microsoft logs and so log only own logs</param>
         /// <returns><see cref="LoggerConfiguration"/></returns>
+        [Obsolete()]
         public static LoggerConfiguration ConfigueAll(this LoggerConfiguration configuration,
             LogEventLevel minLevel = LevelAlias.Minimum,
             bool skipMicrosoftLog = true)
@@ -84,13 +88,33 @@ namespace Serilog
         /// </summary>
         /// <param name="configuration"><see cref="LoggerConfiguration"/></param>
         /// <returns><see cref="LoggerConfiguration"/></returns>
+        [Obsolete("Use ConfigueSourceContextFilter")]
         public static LoggerConfiguration ConfigueSkipMicrosoftLog(this LoggerConfiguration configuration)
         {
-            return configuration.Filter.ByExcluding(f =>
-                f.Properties.ContainsKey(Constants.SourceContextPropertyName)
-                && f.Properties.TryGetValue(Constants.SourceContextPropertyName, out LogEventPropertyValue v)
-                && v.ToString().StartsWith(DefaultFilter)
-            );
+            return configuration.Filter.ByExcluding(logEvent =>
+            {
+                if (logEvent.Properties.TryGetValue(Constants.SourceContextPropertyName, out LogEventPropertyValue sourceContext))
+                {
+                    if (sourceContext is ScalarValue sv && sv.Value is string)
+                    {
+                        var loggerName = (string)sv.Value;
+
+                        return loggerName.StartsWith(DefaultFilter);
+                    }
+                }
+                return true;
+            });
+        }
+
+        /// <summary>
+        /// Configues the source context filter.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
+        public static LoggerConfiguration ConfigueSourceContextFilter(this LoggerConfiguration configuration, SourceContextFilterOptions options)
+        {
+            return configuration.Filter.With(new SourceContextFilter(options));
         }
 
         /// <summary>
@@ -226,6 +250,7 @@ namespace Serilog
         /// <param name="configuration"><see cref="LoggerConfiguration"/></param>
         /// <param name="environmentName">Production|Staging|Development</param>
         /// <returns><see cref="LoggerConfiguration"/></returns>
+        [Obsolete("Use ConfigueLevel")]
         public static LoggerConfiguration ConfigueLevel(this LoggerConfiguration configuration, string environmentName = "Production")
         {
             if (environmentName.Equals("Production", StringComparison.OrdinalIgnoreCase))
@@ -251,7 +276,7 @@ namespace Serilog
         /// <returns><see cref="LoggerConfiguration"/></returns>
         public static LoggerConfiguration ConfigueLevel(this LoggerConfiguration configuration, LogEventLevel minLevel = LevelAlias.Minimum)
         {
-           switch(minLevel)
+            switch (minLevel)
             {
                 case LogEventLevel.Fatal:
                     return configuration.MinimumLevel.Fatal();

@@ -20,7 +20,7 @@ namespace Es.Serilog.Lite
         {
             return Create(new SerilogOptions
             {
-                LogMinLevel = "Debug",
+                LogMinLevel = LogEventLevel.Debug,
                 StdOut = true
             });
         }
@@ -38,18 +38,18 @@ namespace Es.Serilog.Lite
                 serilogOptions = new SerilogOptions();
             }
 
-            if (string.IsNullOrWhiteSpace(serilogOptions.LogMinLevel))
+            if (!serilogOptions.LogMinLevel.HasValue)
             {
                 switch (environmentName)
                 {
                     case "Production":
-                        serilogOptions.LogMinLevel = "Information";
+                        serilogOptions.LogMinLevel = LogEventLevel.Information;
                         break;
                     case "Staging":
-                        serilogOptions.LogMinLevel = "Debug";
+                        serilogOptions.LogMinLevel = LogEventLevel.Debug;
                         break;
                     default:
-                        serilogOptions.LogMinLevel = "Verbose";
+                        serilogOptions.LogMinLevel = LogEventLevel.Verbose;
                         break;
                 }
             }
@@ -71,17 +71,12 @@ namespace Es.Serilog.Lite
 
             var configuration = new LoggerConfiguration().Configue();
 
-            var defaultLevel = LogEventLevel.Verbose;
-
-            if (!string.IsNullOrWhiteSpace(serilogOptions.LogMinLevel))
+            if (!serilogOptions.LogMinLevel.HasValue)
             {
-                if (!Enum.TryParse(serilogOptions.LogMinLevel, out defaultLevel))
-                {
-                    defaultLevel = LogEventLevel.Verbose;
-                }
+                serilogOptions.LogMinLevel = LogEventLevel.Debug;
             }
 
-            configuration.ConfigueLevel(defaultLevel);
+            configuration.ConfigueLevel(serilogOptions.LogMinLevel.Value);
 
             var sinkConfig = configuration.WriteTo;
 
@@ -97,10 +92,9 @@ namespace Es.Serilog.Lite
                 Configue(configuration.WriteTo, serilogOptions);
             }
 
-            //Filter Microsoft log information.
-            if (serilogOptions.SkipMicrosoftLog)
+            if (serilogOptions.SourceContextFilterOptions != null)
             {
-                configuration.ConfigueSkipMicrosoftLog();
+                configuration.ConfigueSourceContextFilter(serilogOptions.SourceContextFilterOptions);
             }
 
             return configuration.CreateLogger();
