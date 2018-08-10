@@ -20,6 +20,7 @@ using System.Net.Security;
 using System.Text;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Formatting;
@@ -137,9 +138,7 @@ namespace Es.Serilog.Lite.Email
                     smtpClient.ServerCertificateValidationCallback = (s, c, h, e) => true;
                 }
 
-                smtpClient.Connect(
-                    _emailConfig.MailServer, _emailConfig.Port,
-                    useSsl: _emailConfig.EnableSsl);
+                smtpClient.Connect( _emailConfig.MailServer, _emailConfig.Port, SecureSocketOptions.Auto);
 
                 if (_emailConfig.NetworkCredentials != null)
                 {
