@@ -16,7 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Security;
 using System.Text;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
@@ -127,6 +126,7 @@ namespace Es.Serilog.Lite.Email
         private SmtpClient OpenConnectedSmtpClient()
         {
             var smtpClient = new SmtpClient();
+
             if (!string.IsNullOrWhiteSpace(_emailConfig.MailServer))
             {
                 if (_emailConfig.ServerCertificateValidationCallback != null)
@@ -138,7 +138,10 @@ namespace Es.Serilog.Lite.Email
                     smtpClient.ServerCertificateValidationCallback = (s, c, h, e) => true;
                 }
 
-                smtpClient.Connect( _emailConfig.MailServer, _emailConfig.Port, SecureSocketOptions.Auto);
+                if (_emailConfig.Timeout > 0)
+                    smtpClient.Timeout = _emailConfig.Timeout;
+
+                smtpClient.Connect(_emailConfig.MailServer, _emailConfig.Port, SecureSocketOptions.Auto);
 
                 if (_emailConfig.NetworkCredentials != null)
                 {
@@ -148,6 +151,7 @@ namespace Es.Serilog.Lite.Email
                             _emailConfig.MailServer, _emailConfig.Port, "smtp"));
                 }
             }
+
             return smtpClient;
         }
     }

@@ -46,6 +46,12 @@ namespace Es.Serilog.Lite.Email
         /// </summary>
         public ICredentialsByHost NetworkCredentials { get; set; }
 
+
+        /// <summary>
+        ///Get or set the timeout for network streaming operations, in milliseconds.
+        /// </summary>
+        public int Timeout { get; set; } = 5000;
+
         /// <summary>
         /// Gets or sets the port used for the connection.
         /// Default value is 25.
