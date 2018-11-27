@@ -18,7 +18,8 @@
     <PackageId>Es.Serilog.Lite</PackageId>
     <PackageTags>logging;log;logger</PackageTags>
     <PackageProjectUrl>https://github.com/vla/Es.Serilog.Lite</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/vla/Es.Serilog.Lite/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageLicenseType>Apache-2.0</PackageLicenseType>
     <PackageIconUrl>http://s.gravatar.com/avatar/28dfa5190889f7190e74b683fc30b827?s=80</PackageIconUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/vla/Es.Serilog.Lite</RepositoryUrl>
