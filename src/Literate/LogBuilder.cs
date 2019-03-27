@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using Es.Serilog.Lite.Formatting;
 using Serilog;
 using Serilog.Configuration;
@@ -164,6 +165,11 @@ namespace Es.Serilog.Lite
             //email
             if (serilogOptions.Email != null)
             {
+                if(!string.IsNullOrWhiteSpace( serilogOptions.Email.Account) && !string.IsNullOrWhiteSpace(serilogOptions.Email.Password))
+                {
+                    serilogOptions.Email.NetworkCredentials = new NetworkCredential(serilogOptions.Email.Account, serilogOptions.Email.Password);
+                }
+
                 configuration.Email(serilogOptions.Email, outputTemplate: outputTemplate, restrictedToMinimumLevel: LogEventLevel.Warning);
             }
         }

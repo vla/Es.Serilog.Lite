@@ -92,5 +92,15 @@ namespace Es.Serilog.Lite.Email
         /// Sets whether the body contents of the email is HTML. Defaults to false.
         /// </summary>
         public bool IsBodyHtml { get; set; }
+
+        /// <summary>
+        /// The user name associated with the credentials.
+        /// </summary>
+        public string Account { get; set; }
+
+        /// <summary>
+        /// he password for the user name associated with the credentials.
+        /// </summary>
+        public string Password { get; set; }
     }
 }
