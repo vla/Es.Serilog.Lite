@@ -16,6 +16,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
@@ -135,7 +137,7 @@ namespace Es.Serilog.Lite.Email
                 }
                 else
                 {
-                    smtpClient.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                    smtpClient.ServerCertificateValidationCallback = ServerCertificateValidationCallback;
                 }
 
                 if (_emailConfig.Timeout > 0)
@@ -153,6 +155,11 @@ namespace Es.Serilog.Lite.Email
             }
 
             return smtpClient;
+        }
+
+        private static bool ServerCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            return true;
         }
     }
 }

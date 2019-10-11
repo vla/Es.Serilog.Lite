@@ -41,12 +41,12 @@ namespace Es.Serilog.Lite
 
             if (!serilogOptions.LogMinLevel.HasValue)
             {
-                switch (environmentName)
+                switch (environmentName.ToLower())
                 {
-                    case "Production":
+                    case "production":
                         serilogOptions.LogMinLevel = LogEventLevel.Information;
                         break;
-                    case "Staging":
+                    case "staging":
                         serilogOptions.LogMinLevel = LogEventLevel.Debug;
                         break;
                     default:
@@ -165,7 +165,7 @@ namespace Es.Serilog.Lite
             //email
             if (serilogOptions.Email != null)
             {
-                if(!string.IsNullOrWhiteSpace( serilogOptions.Email.Account) && !string.IsNullOrWhiteSpace(serilogOptions.Email.Password))
+                if (!string.IsNullOrWhiteSpace(serilogOptions.Email.Account) && !string.IsNullOrWhiteSpace(serilogOptions.Email.Password))
                 {
                     serilogOptions.Email.NetworkCredentials = new NetworkCredential(serilogOptions.Email.Account, serilogOptions.Email.Password);
                 }

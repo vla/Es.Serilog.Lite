@@ -19,12 +19,6 @@ namespace Es.Serilog.Lite
         public bool FormatJson { get; set; }
 
         /// <summary>
-        /// Whether to filter Microsoft logs.
-        /// </summary>
-        [System.Obsolete("Use SourceContextFilterOptions")]
-        public bool SkipMicrosoftLog { get; set; }
-
-        /// <summary>
         /// Gets or sets the source context filter options.
         /// </summary>
         public SourceContextFilterOptions SourceContextFilterOptions { get; set; }

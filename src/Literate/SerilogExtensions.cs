@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using Es.Serilog.Lite;
 using Serilog.Configuration;
-using Serilog.Core;
 using Serilog.Events;
 using Serilog.Formatting;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -20,58 +18,6 @@ namespace Serilog
         /// </summary>
         public const string DefaultOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level:w} {SourceContext} {Message}{NewLine}{Exception}";
 
-        private const string DefaultFilter = "Microsoft";
-
-        /// <summary>
-        /// Configue All
-        /// </summary>
-        /// <param name="configuration"><see cref="LoggerConfiguration"/></param>
-        /// <param name="environmentName">Production|Staging|Development</param>
-        /// <param name="skipMicrosoftLog">Skip Microsoft logs and so log only own logs</param>
-        /// <returns><see cref="LoggerConfiguration"/></returns>
-        [Obsolete()]
-        public static LoggerConfiguration ConfigueAll(this LoggerConfiguration configuration,
-            string environmentName = "Production",
-            bool skipMicrosoftLog = true)
-        {
-            configuration = configuration
-                .Configue()
-                .ConfigueLevel(environmentName)
-                .WriteTo.Async(async =>
-                {
-                    async.ConfigueStd();
-                    async.ConfigueRollingFile();
-                });
-            if (skipMicrosoftLog)
-                return configuration.ConfigueSkipMicrosoftLog();
-            return configuration;
-        }
-
-        /// <summary>
-        /// Configue All
-        /// </summary>
-        /// <param name="configuration"><see cref="LoggerConfiguration"/></param>
-        /// <param name="minLevel"><see cref="LogEventLevel"/></param>
-        /// <param name="skipMicrosoftLog">Skip Microsoft logs and so log only own logs</param>
-        /// <returns><see cref="LoggerConfiguration"/></returns>
-        [Obsolete()]
-        public static LoggerConfiguration ConfigueAll(this LoggerConfiguration configuration,
-            LogEventLevel minLevel = LevelAlias.Minimum,
-            bool skipMicrosoftLog = true)
-        {
-            configuration = configuration
-                .Configue()
-                .ConfigueLevel(minLevel)
-                .WriteTo.Async(async =>
-                {
-                    async.ConfigueStd();
-                    async.ConfigueRollingFile();
-                });
-            if (skipMicrosoftLog)
-                return configuration.ConfigueSkipMicrosoftLog();
-            return configuration;
-        }
-
         /// <summary>
         /// Configue Default
         /// </summary>
@@ -81,29 +27,6 @@ namespace Serilog
         {
             return configuration
                 .Enrich.FromLogContext();
-        }
-
-        /// <summary>
-        /// Configue Skip Microsoft logs and so log only own logs
-        /// </summary>
-        /// <param name="configuration"><see cref="LoggerConfiguration"/></param>
-        /// <returns><see cref="LoggerConfiguration"/></returns>
-        [Obsolete("Use ConfigueSourceContextFilter")]
-        public static LoggerConfiguration ConfigueSkipMicrosoftLog(this LoggerConfiguration configuration)
-        {
-            return configuration.Filter.ByExcluding(logEvent =>
-            {
-                if (logEvent.Properties.TryGetValue(Constants.SourceContextPropertyName, out LogEventPropertyValue sourceContext))
-                {
-                    if (sourceContext is ScalarValue sv && sv.Value is string)
-                    {
-                        var loggerName = (string)sv.Value;
-
-                        return loggerName.StartsWith(DefaultFilter);
-                    }
-                }
-                return true;
-            });
         }
 
         /// <summary>
@@ -189,7 +112,7 @@ namespace Serilog
         {
             return configuration.RollingFile(
                 pathFormat: pathFormat ?? Path.Combine(
-#if NET45
+#if NETFULL
                     AppDomain.CurrentDomain.BaseDirectory
 #else
                     AppContext.BaseDirectory
@@ -229,7 +152,7 @@ namespace Serilog
         {
             return configuration.RollingFile(formatter,
                                 pathFormat ?? Path.Combine(
-#if NET45
+#if NETFULL
                     AppDomain.CurrentDomain.BaseDirectory
 #else
                     AppContext.BaseDirectory
@@ -248,30 +171,6 @@ namespace Serilog
         /// Configuration log level
         /// </summary>
         /// <param name="configuration"><see cref="LoggerConfiguration"/></param>
-        /// <param name="environmentName">Production|Staging|Development</param>
-        /// <returns><see cref="LoggerConfiguration"/></returns>
-        [Obsolete("Use ConfigueLevel")]
-        public static LoggerConfiguration ConfigueLevel(this LoggerConfiguration configuration, string environmentName = "Production")
-        {
-            if (environmentName.Equals("Production", StringComparison.OrdinalIgnoreCase))
-            {
-                return configuration.MinimumLevel.Information();
-            }
-            else if (environmentName.Equals("Development", StringComparison.OrdinalIgnoreCase))
-            {
-                return configuration.MinimumLevel.Verbose();
-            }
-            else
-            {
-                //Staging
-                return configuration.MinimumLevel.Debug();
-            }
-        }
-
-        /// <summary>
-        /// Configuration log level
-        /// </summary>
-        /// <param name="configuration"><see cref="LoggerConfiguration"/></param>
         /// <param name="minLevel"><see cref="LogEventLevel"/></param>
         /// <returns><see cref="LoggerConfiguration"/></returns>
         public static LoggerConfiguration ConfigueLevel(this LoggerConfiguration configuration, LogEventLevel minLevel = LevelAlias.Minimum)
@@ -280,14 +179,19 @@ namespace Serilog
             {
                 case LogEventLevel.Fatal:
                     return configuration.MinimumLevel.Fatal();
+
                 case LogEventLevel.Error:
                     return configuration.MinimumLevel.Error();
+
                 case LogEventLevel.Warning:
                     return configuration.MinimumLevel.Warning();
+
                 case LogEventLevel.Information:
                     return configuration.MinimumLevel.Information();
+
                 case LogEventLevel.Debug:
                     return configuration.MinimumLevel.Debug();
+
                 default:
                     return configuration.MinimumLevel.Verbose();
             }
