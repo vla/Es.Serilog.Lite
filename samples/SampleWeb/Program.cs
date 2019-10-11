@@ -41,7 +41,6 @@ namespace SampleWeb
                              config.AddUserSecrets(appAssembly, optional: true);
                          }
 
-                         config.AddApplicationInsightsSettings(developerMode: true);
                      }
 
                      config.AddEnvironmentVariables();
@@ -84,7 +83,6 @@ namespace SampleWeb
                  {
                      options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
                  })
-                 .UseApplicationInsights()
                  .UseStartup<Startup>();
 
             return builder.Build();
