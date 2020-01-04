@@ -17,13 +17,13 @@ namespace Es.Serilog.Lite
         /// Build the StdOut Serilog instance, LogLevel is Debug
         /// </summary>
         /// <returns></returns>
-        public static ILogger Create()
+        public static ILogger Create(Action<LoggerSinkConfiguration> configure = null)
         {
             return Create(new SerilogOptions
             {
                 LogMinLevel = LogEventLevel.Debug,
                 StdOut = true
-            });
+            }, configure);
         }
 
         /// <summary>
@@ -31,8 +31,9 @@ namespace Es.Serilog.Lite
         /// </summary>
         /// <param name="serilogOptions"><see cref="SerilogOptions" /></param>
         /// <param name="environmentName">Development|Production|Staging</param>
+        /// <param name="configure"></param>
         /// <returns></returns>
-        public static ILogger Create(SerilogOptions serilogOptions, string environmentName)
+        public static ILogger Create(SerilogOptions serilogOptions, string environmentName, Action<LoggerSinkConfiguration> configure = null)
         {
             if (serilogOptions == null)
             {
@@ -55,15 +56,16 @@ namespace Es.Serilog.Lite
                 }
             }
 
-            return Create(serilogOptions);
+            return Create(serilogOptions, configure);
         }
 
         /// <summary>
         /// Build the Serilog instance.
         /// </summary>
         /// <param name="serilogOptions"><see cref="SerilogOptions" /></param>
+        /// <param name="configure"></param>
         /// <returns></returns>
-        public static ILogger Create(SerilogOptions serilogOptions)
+        public static ILogger Create(SerilogOptions serilogOptions, Action<LoggerSinkConfiguration> configure = null)
         {
             if (serilogOptions == null)
             {
@@ -79,18 +81,16 @@ namespace Es.Serilog.Lite
 
             configuration.ConfigueLevel(serilogOptions.LogMinLevel.Value);
 
-            var sinkConfig = configuration.WriteTo;
-
             if (serilogOptions.Async)
             {
                 configuration.WriteTo.Async(async =>
                 {
-                    Configue(async, serilogOptions);
+                    Configue(async, serilogOptions, configure);
                 });
             }
             else
             {
-                Configue(configuration.WriteTo, serilogOptions);
+                Configue(configuration.WriteTo, serilogOptions, configure);
             }
 
             if (serilogOptions.SourceContextFilterOptions != null)
@@ -101,7 +101,7 @@ namespace Es.Serilog.Lite
             return configuration.CreateLogger();
         }
 
-        private static void Configue(LoggerSinkConfiguration configuration, SerilogOptions serilogOptions)
+        private static void Configue(LoggerSinkConfiguration configuration, SerilogOptions serilogOptions, Action<LoggerSinkConfiguration> configure = null)
         {
             var outputTemplate = serilogOptions.OutputTemplate ?? SerilogExtensions.DefaultOutputTemplate;
 
@@ -172,6 +172,8 @@ namespace Es.Serilog.Lite
 
                 configuration.Email(serilogOptions.Email, outputTemplate: outputTemplate, restrictedToMinimumLevel: LogEventLevel.Warning);
             }
+
+            configure?.Invoke(configuration);
         }
     }
 }
