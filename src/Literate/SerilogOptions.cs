@@ -39,6 +39,11 @@ namespace Es.Serilog.Lite
         public string PathFormat { get; set; }
 
         /// <summary>
+        /// File log file path.
+        /// </summary>
+        public string Path { get; set; }
+
+        /// <summary>
         /// Log output template
         /// </summary>
         public string OutputTemplate { get; set; }

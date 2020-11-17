@@ -112,17 +112,24 @@ namespace Es.Serilog.Lite
                 jsonFormatter = new JsonFormatter();
             }
 
-            var pathFormat = serilogOptions.PathFormat;
+            var obsoletePathFormat = serilogOptions.PathFormat;
+            var path = serilogOptions.Path;
 
-            if (!string.IsNullOrWhiteSpace(pathFormat))
+            //compatibility
+            if (!string.IsNullOrWhiteSpace(obsoletePathFormat) && string.IsNullOrWhiteSpace(path))
+            {
+                path = obsoletePathFormat;
+            }
+
+            if (!string.IsNullOrWhiteSpace(path))
             {
                 // whether relative path is used, the root directory is applied by default.
-                if (!Path.IsPathRooted(pathFormat))
+                if (!Path.IsPathRooted(path))
                 {
 #if NETFULL
-                    pathFormat = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathFormat);
+                    path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
 #else
-                    pathFormat = Path.Combine(AppContext.BaseDirectory, pathFormat);
+                    path = Path.Combine(AppContext.BaseDirectory, path);
 #endif
                 }
             }
@@ -130,9 +137,9 @@ namespace Es.Serilog.Lite
             {
                 //By default, the 'logs' directory of the root directory.
 #if NETFULL
-                pathFormat = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs", "{Date}.log");
+                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs", "log.log");
 #else
-                pathFormat = Path.Combine(AppContext.BaseDirectory, "logs", "{Date}.log");
+                path = Path.Combine(AppContext.BaseDirectory, "logs", "log.log");
 #endif
             }
 
@@ -154,11 +161,11 @@ namespace Es.Serilog.Lite
             {
                 if (serilogOptions.FormatJson)
                 {
-                    configuration.ConfigueRollingFile(jsonFormatter, pathFormat: pathFormat);
+                    configuration.ConfigueFile(jsonFormatter, path: path);
                 }
                 else
                 {
-                    configuration.ConfigueRollingFile(pathFormat: pathFormat, outputTemplate: outputTemplate);
+                    configuration.ConfigueFile(path: path, outputTemplate: outputTemplate);
                 }
             }
 

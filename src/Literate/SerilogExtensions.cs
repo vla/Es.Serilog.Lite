@@ -88,6 +88,50 @@ namespace Serilog
         }
 
         /// <summary>
+        /// Configure File
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="outputTemplate"></param>
+        /// <param name="shared"></param>
+        /// <param name="buffered"></param>
+        /// <param name="retainedFileCountLimit"></param>
+        /// <param name="fileSizeLimitBytes"></param>
+        /// <param name="restrictedToMinimumLevel"></param>
+        /// <param name="formatProvider"></param>
+        /// <param name="path"></param>
+        /// <param name="rollingInterval"></param>
+        /// <returns><see cref="LoggerConfiguration"/></returns>
+        public static LoggerConfiguration ConfigueFile(this LoggerSinkConfiguration configuration,
+            string outputTemplate = DefaultOutputTemplate,
+            bool shared = true,
+            bool buffered = false,
+            int retainedFileCountLimit = 31,
+            int fileSizeLimitBytes = 1073741824,
+            LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
+            IFormatProvider formatProvider = null,
+            string path = null,
+            RollingInterval rollingInterval = RollingInterval.Day)
+        {
+            return configuration.File(
+                path: path ?? Path.Combine(
+#if NETFULL
+                    AppDomain.CurrentDomain.BaseDirectory
+#else
+                    AppContext.BaseDirectory
+#endif
+                    , "logs", "log.log"),
+                shared: shared,
+                buffered: buffered,
+                restrictedToMinimumLevel: restrictedToMinimumLevel,
+                formatProvider: formatProvider,
+                retainedFileCountLimit: retainedFileCountLimit,
+                fileSizeLimitBytes: fileSizeLimitBytes,
+                outputTemplate: outputTemplate,
+                rollOnFileSizeLimit: true,
+                rollingInterval: rollingInterval);
+        }
+
+        /// <summary>
         /// Configure RollingFile
         /// </summary>
         /// <param name="configuration"></param>
@@ -98,8 +142,11 @@ namespace Serilog
         /// <param name="fileSizeLimitBytes"></param>
         /// <param name="restrictedToMinimumLevel"></param>
         /// <param name="formatProvider"></param>
-        /// <param name="pathFormat"></param>
+        /// <param name="path"></param>
+        /// <param name="rollingInterval"></param>
         /// <returns><see cref="LoggerConfiguration"/></returns>
+        
+        [Obsolete("Use ConfigueFile")]
         public static LoggerConfiguration ConfigueRollingFile(this LoggerSinkConfiguration configuration,
             string outputTemplate = DefaultOutputTemplate,
             bool shared = true,
@@ -108,23 +155,68 @@ namespace Serilog
             int fileSizeLimitBytes = 1073741824,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
             IFormatProvider formatProvider = null,
-            string pathFormat = null)
+            string path = null,
+            RollingInterval rollingInterval = RollingInterval.Day)
         {
-            return configuration.RollingFile(
-                pathFormat: pathFormat ?? Path.Combine(
+            return configuration.File(
+                path: path ?? Path.Combine(
 #if NETFULL
                     AppDomain.CurrentDomain.BaseDirectory
 #else
                     AppContext.BaseDirectory
 #endif
-                    , "logs", "{Date}.log"),
+                    , "logs", "log.log"),
                 shared: shared,
                 buffered: buffered,
                 restrictedToMinimumLevel: restrictedToMinimumLevel,
                 formatProvider: formatProvider,
                 retainedFileCountLimit: retainedFileCountLimit,
                 fileSizeLimitBytes: fileSizeLimitBytes,
-                outputTemplate: outputTemplate);
+                outputTemplate: outputTemplate,
+                rollOnFileSizeLimit: true,
+                rollingInterval: rollingInterval);
+        }
+
+
+        /// <summary>
+        /// Configure File
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="formatter"></param>
+        /// <param name="shared"></param>
+        /// <param name="buffered"></param>
+        /// <param name="retainedFileCountLimit"></param>
+        /// <param name="fileSizeLimitBytes"></param>
+        /// <param name="restrictedToMinimumLevel"></param>
+        /// <param name="path"></param>
+        /// <param name="rollingInterval"></param>
+        /// <returns><see cref="LoggerConfiguration"/></returns>
+        public static LoggerConfiguration ConfigueFile(this LoggerSinkConfiguration configuration,
+            ITextFormatter formatter,
+            bool shared = true,
+            bool buffered = false,
+            int retainedFileCountLimit = 31,
+            int fileSizeLimitBytes = 1073741824,
+            LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
+            string path = null,
+            RollingInterval rollingInterval = RollingInterval.Day)
+        {
+            return configuration.File(formatter,
+                path ?? Path.Combine(
+#if NETFULL
+                    AppDomain.CurrentDomain.BaseDirectory
+#else
+                    AppContext.BaseDirectory
+#endif
+                    , "logs", "log.log"),
+                    restrictedToMinimumLevel: restrictedToMinimumLevel,
+                    fileSizeLimitBytes: fileSizeLimitBytes,
+                    retainedFileCountLimit: retainedFileCountLimit,
+                    shared: shared,
+                    buffered: buffered,
+                    rollOnFileSizeLimit: true,
+                    rollingInterval: rollingInterval
+                );
         }
 
         /// <summary>
@@ -137,9 +229,11 @@ namespace Serilog
         /// <param name="retainedFileCountLimit"></param>
         /// <param name="fileSizeLimitBytes"></param>
         /// <param name="restrictedToMinimumLevel"></param>
-        /// <param name="formatProvider"></param>
-        /// <param name="pathFormat"></param>
+        /// <param name="path"></param>
+        /// <param name="rollingInterval"></param>
         /// <returns><see cref="LoggerConfiguration"/></returns>
+        [Obsolete("Use ConfigueFile")]
+        
         public static LoggerConfiguration ConfigueRollingFile(this LoggerSinkConfiguration configuration,
             ITextFormatter formatter,
             bool shared = true,
@@ -147,23 +241,24 @@ namespace Serilog
             int retainedFileCountLimit = 31,
             int fileSizeLimitBytes = 1073741824,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-            IFormatProvider formatProvider = null,
-            string pathFormat = null)
+            string path = null,
+            RollingInterval rollingInterval = RollingInterval.Day)
         {
-            return configuration.RollingFile(formatter,
-                                pathFormat ?? Path.Combine(
+            return configuration.File(formatter,
+                path ?? Path.Combine(
 #if NETFULL
                     AppDomain.CurrentDomain.BaseDirectory
 #else
                     AppContext.BaseDirectory
 #endif
-                    , "logs", "{Date}.log"),
-                    restrictedToMinimumLevel,
-                    fileSizeLimitBytes,
-                    retainedFileCountLimit,
+                    , "logs", "log.log"),
+                    restrictedToMinimumLevel: restrictedToMinimumLevel,
+                    fileSizeLimitBytes: fileSizeLimitBytes,
+                    retainedFileCountLimit: retainedFileCountLimit,
                     shared: shared,
-                    buffered: buffered
-
+                    buffered: buffered,
+                    rollOnFileSizeLimit: true,
+                    rollingInterval: rollingInterval
                 );
         }
 
