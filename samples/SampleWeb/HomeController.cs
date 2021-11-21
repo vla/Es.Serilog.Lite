@@ -10,7 +10,7 @@ namespace SampleWeb
     {
         private readonly ILogger _logger;
         private readonly ILogger _logger2;
-        public HomeController(ILogger<HomeController> logger,ILoggerFactory loggerFactory)
+        public HomeController(ILogger<HomeController> logger, ILoggerFactory loggerFactory)
         {
             _logger = logger;
             _logger2 = loggerFactory.CreateLogger("Microsoft.XXX");
@@ -59,7 +59,7 @@ namespace SampleWeb
             {
                 _logger.LogError(ex, "Something went wrong");
                 _logger2.LogError(ex, "Something went wrong");
-                throw ex;
+                throw;
             }
 
             return Content("OK");
