@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using MailKit.Security;
 using System.Net;
 
 namespace Es.Serilog.Lite.Email
@@ -102,5 +103,18 @@ namespace Es.Serilog.Lite.Email
         /// he password for the user name associated with the credentials.
         /// </summary>
         public string Password { get; set; }
+
+        /// <summary>
+        /// Set secure socket option
+        /// </summary>
+        public SecureSocketOptions? SecureSocketOption { get; set; }
+
+
+        internal virtual IEmailTransport CreateEmailTransport()
+        {
+            return new MailKitEmailTransport(this);
+        }
+
+
     }
 }

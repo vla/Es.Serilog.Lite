@@ -20,6 +20,7 @@ using Serilog.Configuration;
 using Serilog.Events;
 using Serilog.Formatting;
 using Serilog.Formatting.Display;
+using Serilog.Sinks.PeriodicBatching;
 
 namespace Serilog
 {
@@ -28,6 +29,9 @@ namespace Serilog
     /// </summary>
     public static class LoggerConfigurationEmailExtensions
     {
+        const int DefaultBatchPostingLimit = 100;
+        static readonly TimeSpan DefaultPeriod = TimeSpan.FromSeconds(30);
+
         /// <summary>
         /// Adds a sink that sends log events via email.
         /// </summary>
@@ -49,7 +53,7 @@ namespace Serilog
             string toEmail,
             string outputTemplate = SerilogExtensions.DefaultOutputTemplate,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-            int batchPostingLimit = EmailSink.DefaultBatchPostingLimit,
+            int batchPostingLimit = DefaultBatchPostingLimit,
             TimeSpan? period = null,
             IFormatProvider formatProvider = null,
             string mailSubject = EmailConfig.DefaultSubject)
@@ -93,7 +97,7 @@ namespace Serilog
             ICredentialsByHost networkCredential = null,
             string outputTemplate = SerilogExtensions.DefaultOutputTemplate,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-            int batchPostingLimit = EmailSink.DefaultBatchPostingLimit,
+            int batchPostingLimit = DefaultBatchPostingLimit,
             TimeSpan? period = null,
             IFormatProvider formatProvider = null,
             string mailSubject = EmailConfig.DefaultSubject)
@@ -139,7 +143,7 @@ namespace Serilog
             ICredentialsByHost networkCredential = null,
             string outputTemplate = SerilogExtensions.DefaultOutputTemplate,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-            int batchPostingLimit = EmailSink.DefaultBatchPostingLimit,
+            int batchPostingLimit = DefaultBatchPostingLimit,
             TimeSpan? period = null,
             IFormatProvider formatProvider = null,
             string mailSubject = EmailConfig.DefaultSubject)
@@ -179,25 +183,32 @@ namespace Serilog
             EmailConfig emailConfig,
             string outputTemplate = SerilogExtensions.DefaultOutputTemplate,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-            int batchPostingLimit = EmailSink.DefaultBatchPostingLimit,
+            int batchPostingLimit = DefaultBatchPostingLimit,
             TimeSpan? period = null,
             IFormatProvider formatProvider = null,
             string mailSubject = EmailConfig.DefaultSubject)
         {
-            if (emailConfig == null) throw new ArgumentNullException("connectionInfo");
+            if (emailConfig == null) throw new ArgumentNullException("emailConfig");
 
             if (!string.IsNullOrEmpty(emailConfig.EmailSubject))
             {
                 mailSubject = emailConfig.EmailSubject;
             }
 
-            var defaultedPeriod = period ?? EmailSink.DefaultPeriod;
-            var formatter = new MessageTemplateTextFormatter(outputTemplate, formatProvider);
-            var subjectLineFormatter = new MessageTemplateTextFormatter(mailSubject, formatProvider);
+            var batchingPeriod = period ?? DefaultPeriod;
+            var textFormatter = new MessageTemplateTextFormatter(outputTemplate, formatProvider);
+            var mailSubjectFormatter = new MessageTemplateTextFormatter(mailSubject, formatProvider);
 
-            return loggerConfiguration.Sink(
-                new EmailSink(emailConfig, batchPostingLimit, defaultedPeriod, formatter, subjectLineFormatter),
-                restrictedToMinimumLevel);
+            var batchingOptions = new PeriodicBatchingSinkOptions
+            {
+                BatchSizeLimit = batchPostingLimit,
+                Period = batchingPeriod,
+                EagerlyEmitFirstEvent = false,  // set default to false, not usable for emailing
+                QueueLimit = 10000
+            };
+            var batchingSink = new PeriodicBatchingSink(new EmailSink(emailConfig, textFormatter, mailSubjectFormatter), batchingOptions);
+
+            return loggerConfiguration.Sink(batchingSink, restrictedToMinimumLevel);
         }
 
         /// <summary>
@@ -217,7 +228,7 @@ namespace Serilog
             EmailConfig emailConfig,
             ITextFormatter textFormatter,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-            int batchPostingLimit = EmailSink.DefaultBatchPostingLimit,
+            int batchPostingLimit = DefaultBatchPostingLimit,
             TimeSpan? period = null,
             string mailSubject = EmailConfig.DefaultSubject)
         {
@@ -226,11 +237,18 @@ namespace Serilog
 
             ITextFormatter mailSubjectFormatter = new MessageTemplateTextFormatter(mailSubject, null);
 
-            var defaultedPeriod = period ?? EmailSink.DefaultPeriod;
+            var batchingPeriod = period ?? DefaultPeriod;
 
-            return loggerConfiguration.Sink(
-                new EmailSink(emailConfig, batchPostingLimit, defaultedPeriod, textFormatter, mailSubjectFormatter),
-                restrictedToMinimumLevel);
+            var batchingOptions = new PeriodicBatchingSinkOptions
+            {
+                BatchSizeLimit = batchPostingLimit,
+                Period = batchingPeriod,
+                EagerlyEmitFirstEvent = false,  // set default to false, not usable for emailing
+                QueueLimit = 10000
+            };
+            var batchingSink = new PeriodicBatchingSink(new EmailSink(emailConfig, textFormatter, mailSubjectFormatter), batchingOptions);
+
+            return loggerConfiguration.Sink(batchingSink, restrictedToMinimumLevel);
         }
     }
 }
