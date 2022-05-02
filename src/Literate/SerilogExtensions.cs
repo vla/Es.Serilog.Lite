@@ -52,9 +52,9 @@ namespace Serilog
         /// <returns><see cref="LoggerConfiguration"/></returns>
         public static LoggerConfiguration ConfigueStd(this LoggerSinkConfiguration configuration,
             string outputTemplate = DefaultOutputTemplate,
-             ConsoleTheme theme = null,
+            ConsoleTheme? theme = null,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-            IFormatProvider formatProvider = null,
+            IFormatProvider? formatProvider = null,
             LogEventLevel? stdErrorFromLevel = null
            )
         {
@@ -108,8 +108,8 @@ namespace Serilog
             int retainedFileCountLimit = 31,
             int fileSizeLimitBytes = 1073741824,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-            IFormatProvider formatProvider = null,
-            string path = null,
+            IFormatProvider? formatProvider = null,
+            string? path = null,
             RollingInterval rollingInterval = RollingInterval.Day)
         {
             return configuration.File(
@@ -154,8 +154,8 @@ namespace Serilog
             int retainedFileCountLimit = 31,
             int fileSizeLimitBytes = 1073741824,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-            IFormatProvider formatProvider = null,
-            string path = null,
+            IFormatProvider? formatProvider = null,
+            string? path = null,
             RollingInterval rollingInterval = RollingInterval.Day)
         {
             return configuration.File(
@@ -198,7 +198,7 @@ namespace Serilog
             int retainedFileCountLimit = 31,
             int fileSizeLimitBytes = 1073741824,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-            string path = null,
+            string? path = null,
             RollingInterval rollingInterval = RollingInterval.Day)
         {
             return configuration.File(formatter,
@@ -241,7 +241,7 @@ namespace Serilog
             int retainedFileCountLimit = 31,
             int fileSizeLimitBytes = 1073741824,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-            string path = null,
+            string? path = null,
             RollingInterval rollingInterval = RollingInterval.Day)
         {
             return configuration.File(formatter,

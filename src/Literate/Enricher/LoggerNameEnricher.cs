@@ -22,7 +22,7 @@ namespace Es.Serilog.Lite.Enricher
         {
             var loggerName = "Default";
 
-            if (logEvent.Properties.TryGetValue(Constants.SourceContextPropertyName, out LogEventPropertyValue sourceContext))
+            if (logEvent.Properties.TryGetValue(Constants.SourceContextPropertyName, out var sourceContext))
             {
                 if (sourceContext is ScalarValue sv && sv.Value is string)
                 {

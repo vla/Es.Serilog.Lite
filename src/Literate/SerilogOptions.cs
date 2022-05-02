@@ -21,7 +21,7 @@ namespace Es.Serilog.Lite
         /// <summary>
         /// Gets or sets the source context filter options.
         /// </summary>
-        public SourceContextFilterOptions SourceContextFilterOptions { get; set; }
+        public SourceContextFilterOptions? SourceContextFilterOptions { get; set; }
 
         /// <summary>
         /// Whether to enable file records.
@@ -36,17 +36,17 @@ namespace Es.Serilog.Lite
         /// <summary>
         /// File log format file path.
         /// </summary>
-        public string PathFormat { get; set; }
+        public string? PathFormat { get; set; }
 
         /// <summary>
         /// File log file path.
         /// </summary>
-        public string Path { get; set; }
+        public string? Path { get; set; }
 
         /// <summary>
         /// Log output template
         /// </summary>
-        public string OutputTemplate { get; set; }
+        public string? OutputTemplate { get; set; }
 
         /// <summary>
         /// Minimum log level
@@ -56,6 +56,6 @@ namespace Es.Serilog.Lite
         /// <summary>
         /// Gets or sets the email configuration.
         /// </summary>
-        public EmailConfig Email { get; set; }
+        public EmailConfig? Email { get; set; }
     }
 }

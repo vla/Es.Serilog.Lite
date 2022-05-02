@@ -17,7 +17,7 @@ namespace Es.Serilog.Lite
         /// Build the StdOut Serilog instance, LogLevel is Debug
         /// </summary>
         /// <returns></returns>
-        public static ILogger Create(Action<LoggerSinkConfiguration> configure = null)
+        public static ILogger Create(Action<LoggerSinkConfiguration>? configure = null)
         {
             return Create(new SerilogOptions
             {
@@ -33,7 +33,7 @@ namespace Es.Serilog.Lite
         /// <param name="environmentName">Development|Production|Staging</param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public static ILogger Create(SerilogOptions serilogOptions, string environmentName, Action<LoggerSinkConfiguration> configure = null)
+        public static ILogger Create(SerilogOptions serilogOptions, string environmentName, Action<LoggerSinkConfiguration>? configure = null)
         {
             if (serilogOptions == null)
             {
@@ -65,7 +65,7 @@ namespace Es.Serilog.Lite
         /// <param name="serilogOptions"><see cref="SerilogOptions" /></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public static ILogger Create(SerilogOptions serilogOptions, Action<LoggerSinkConfiguration> configure = null)
+        public static ILogger Create(SerilogOptions serilogOptions, Action<LoggerSinkConfiguration>? configure = null)
         {
             if (serilogOptions == null)
             {
@@ -101,11 +101,11 @@ namespace Es.Serilog.Lite
             return configuration.CreateLogger();
         }
 
-        private static void Configue(LoggerSinkConfiguration configuration, SerilogOptions serilogOptions, Action<LoggerSinkConfiguration> configure = null)
+        private static void Configue(LoggerSinkConfiguration configuration, SerilogOptions serilogOptions, Action<LoggerSinkConfiguration>? configure = null)
         {
             var outputTemplate = serilogOptions.OutputTemplate ?? SerilogExtensions.DefaultOutputTemplate;
 
-            JsonFormatter jsonFormatter = null;
+            JsonFormatter? jsonFormatter = null;
 
             if (serilogOptions.FormatJson)
             {
@@ -146,7 +146,7 @@ namespace Es.Serilog.Lite
             //stdout
             if (serilogOptions.StdOut)
             {
-                if (serilogOptions.FormatJson)
+                if (serilogOptions.FormatJson && jsonFormatter != null)
                 {
                     configuration.ConfigueStd(jsonFormatter);
                 }
@@ -159,7 +159,7 @@ namespace Es.Serilog.Lite
             //file Record
             if (serilogOptions.RollingFile)
             {
-                if (serilogOptions.FormatJson)
+                if (serilogOptions.FormatJson && jsonFormatter != null)
                 {
                     configuration.ConfigueFile(jsonFormatter, path: path);
                 }

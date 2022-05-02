@@ -15,6 +15,6 @@ namespace Es.Serilog.Lite
         /// <summary>
         /// Gets the name of the source context. Use StartsWith matching.
         /// </summary>
-        public string SourceContextName { get; set; }
+        public string SourceContextName { get; set; } = default!;
     }
 }

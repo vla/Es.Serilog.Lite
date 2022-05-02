@@ -1,0 +1,44 @@
+<Project>
+
+  <PropertyGroup>
+    <Version>$(Ver)</Version>
+    <PackageVersion>$(Ver)</PackageVersion>
+    <Copyright>2022 EsWork, Inc.</Copyright>
+    <Authors>EasyWork;v.la@live.cn</Authors>
+    <Description>Easy Serilog usage</Description>
+    <Product>Es.Throttle</Product>
+
+
+    <PackageOutputPath>$(MSBuildThisFileDirectory)/artifacts</PackageOutputPath>
+    <PackageTags>Es.Throttle</PackageTags>
+    <LangVersion>latest</LangVersion>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageIcon>icon.png</PackageIcon>
+
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageLicenseType>Apache-2.0</PackageLicenseType>
+
+    <RepositoryUrl>https://github.com/vla/Es.Serilog.Lite</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryBranch>master</RepositoryBranch>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' != 'Debug' ">
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup>
+
+    <SignAssembly>True</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)/build/Es.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)/build/icon.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
+
+</Project>

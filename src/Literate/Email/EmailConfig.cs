@@ -45,7 +45,7 @@ namespace Es.Serilog.Lite.Email
         /// <summary>
         /// Gets or sets the credentials used for authentication.
         /// </summary>
-        public ICredentialsByHost NetworkCredentials { get; set; }
+        public ICredentialsByHost? NetworkCredentials { get; set; }
 
 
         /// <summary>
@@ -62,17 +62,17 @@ namespace Es.Serilog.Lite.Email
         /// <summary>
         /// The email address emails will be sent from.
         /// </summary>
-        public string FromEmail { get; set; }
+        public string FromEmail { get; set; } = default!;
 
         /// <summary>
         /// The email address(es) emails will be sent to. Accepts multiple email addresses separated by comma or semicolon.
         /// </summary>
-        public string ToEmail { get; set; }
+        public string ToEmail { get; set; } = default!;
 
         /// <summary>
         /// The subject to use for the email, this can be a template.
         /// </summary>
-        public string EmailSubject { get; set; }
+        public string EmailSubject { get; set; } = default!;
 
         /// <summary>
         /// Flag as true to use SSL in the SMTP client.
@@ -82,12 +82,12 @@ namespace Es.Serilog.Lite.Email
         /// <summary>
         /// Provides a method that validates server certificates.
         /// </summary>
-        public System.Net.Security.RemoteCertificateValidationCallback ServerCertificateValidationCallback { get; set; }
+        public System.Net.Security.RemoteCertificateValidationCallback? ServerCertificateValidationCallback { get; set; }
 
         /// <summary>
         /// The SMTP email server to use.
         /// </summary>
-        public string MailServer { get; set; }
+        public string? MailServer { get; set; }
 
         /// <summary>
         /// Sets whether the body contents of the email is HTML. Defaults to false.
@@ -97,12 +97,12 @@ namespace Es.Serilog.Lite.Email
         /// <summary>
         /// The user name associated with the credentials.
         /// </summary>
-        public string Account { get; set; }
+        public string? Account { get; set; }
 
         /// <summary>
         /// he password for the user name associated with the credentials.
         /// </summary>
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         /// <summary>
         /// Set secure socket option

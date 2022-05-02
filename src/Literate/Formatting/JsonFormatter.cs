@@ -20,7 +20,7 @@ namespace Es.Serilog.Lite.Formatting
         /// <see cref="LogEventPropertyValue"/>s on the event.
         /// </summary>
         /// <param name="valueFormatter">A value formatter, or null.</param>
-        public JsonFormatter(JsonValueFormatter valueFormatter = null)
+        public JsonFormatter(JsonValueFormatter? valueFormatter = null)
         {
             _valueFormatter = valueFormatter ?? new JsonValueFormatter(typeTagName: "$type");
         }

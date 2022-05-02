@@ -10,7 +10,7 @@ namespace Es.Serilog.Lite
     /// <seealso cref="ILogEventFilter" />
     public class SourceContextFilter : ILogEventFilter
     {
-        private SourceContextFilterOptions _filterOptions;
+        private readonly SourceContextFilterOptions _filterOptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SourceContextFilter" /> class.
@@ -18,11 +18,6 @@ namespace Es.Serilog.Lite
         /// <param name="options">The options.</param>
         public SourceContextFilter(SourceContextFilterOptions options)
         {
-            if (options == null)
-            {
-                new ArgumentNullException(nameof(options));
-            }
-
             _filterOptions = options;
         }
 
@@ -39,7 +34,7 @@ namespace Es.Serilog.Lite
             if (_filterOptions.Rules.Count == 0)
                 return true;
 
-            if (logEvent.Properties.TryGetValue(Constants.SourceContextPropertyName, out LogEventPropertyValue sourceContext))
+            if (logEvent.Properties.TryGetValue(Constants.SourceContextPropertyName, out var sourceContext))
             {
                 if (sourceContext is ScalarValue sv && sv.Value is string)
                 {
