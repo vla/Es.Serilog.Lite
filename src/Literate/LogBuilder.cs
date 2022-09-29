@@ -161,11 +161,19 @@ namespace Es.Serilog.Lite
             {
                 if (serilogOptions.FormatJson && jsonFormatter != null)
                 {
-                    configuration.ConfigueFile(jsonFormatter, path: path);
+                    configuration.ConfigueFile(
+                        jsonFormatter,
+                        retainedFileCountLimit: serilogOptions.RetainedFileCountLimit,
+                        fileSizeLimitBytes: serilogOptions.FileSizeLimitBytes,
+                        path: path);
                 }
                 else
                 {
-                    configuration.ConfigueFile(path: path, outputTemplate: outputTemplate);
+                    configuration.ConfigueFile(
+                        path: path,
+                        retainedFileCountLimit: serilogOptions.RetainedFileCountLimit,
+                        fileSizeLimitBytes: serilogOptions.FileSizeLimitBytes,
+                        outputTemplate: outputTemplate);
                 }
             }
 

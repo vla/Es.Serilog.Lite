@@ -29,6 +29,21 @@ namespace Es.Serilog.Lite
         public bool RollingFile { get; set; }
 
         /// <summary>
+        /// The maximum time after the end of an interval that a rolling log file will be
+        /// retained. Must be greater than or equal to System.TimeSpan.Zero. Ignored if rollingInterval
+        /// is Serilog.RollingInterval.Infinite. 
+        /// </summary>
+        public int RetainedFileCountLimit { get; set; } = 100;
+
+        /// <summary>
+        /// The approximate maximum size, in bytes, to which a log file will be allowed to
+        /// grow. For unrestricted growth, pass null. The default is 1 GB. To avoid writing
+        /// partial events, the last event within the limit will be written in full even
+        /// if it exceeds the limit.
+        /// </summary>
+        public int FileSizeLimitBytes { get; set; } = 1073741824;
+
+        /// <summary>
         /// the IO output is asynchronous.
         /// </summary>
         public bool Async { get; set; }
