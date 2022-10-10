@@ -36,20 +36,18 @@ namespace Es.Serilog.Lite
 
             if (logEvent.Properties.TryGetValue(Constants.SourceContextPropertyName, out var sourceContext))
             {
-                if (sourceContext is ScalarValue sv && sv.Value is string)
+                if (sourceContext is ScalarValue sv && sv.Value is string loggerName)
                 {
-                    var loggerName = (string)sv.Value;
-
                     foreach (var rule in _filterOptions.Rules)
                     {
                         if (loggerName.StartsWith(rule.SourceContextName))
                         {
-                            if (logEvent.Level <= _filterOptions.MinLevel)
+                            if (logEvent.Level < _filterOptions.MinLevel)
                             {
                                 return false;
                             }
 
-                            if (rule.LogLevel.HasValue && logEvent.Level <= rule.LogLevel.Value)
+                            if (rule.LogLevel.HasValue && logEvent.Level < rule.LogLevel.Value)
                             {
                                 return false;
                             }
