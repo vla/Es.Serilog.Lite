@@ -33,7 +33,7 @@ namespace Es.Serilog.Lite
         /// retained. Must be greater than or equal to System.TimeSpan.Zero. Ignored if rollingInterval
         /// is Serilog.RollingInterval.Infinite. 
         /// </summary>
-        public int RetainedFileCountLimit { get; set; } = 100;
+        public int RetainedFileCountLimit { get; set; } = 180;
 
         /// <summary>
         /// The approximate maximum size, in bytes, to which a log file will be allowed to
