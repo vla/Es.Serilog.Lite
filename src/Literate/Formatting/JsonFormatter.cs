@@ -48,20 +48,20 @@ namespace Es.Serilog.Lite.Formatting
             if (output == null) throw new ArgumentNullException(nameof(output));
             if (valueFormatter == null) throw new ArgumentNullException(nameof(valueFormatter));
 
-            output.Write("{\"AppTime\":\"");
+            output.Write("{\"time\":\"");
             output.Write(logEvent.Timestamp.LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss,fff"));
-            output.Write("\",\"Message\":");
+            output.Write("\",\"msg\":");
 
             var message = logEvent.MessageTemplate.Render(logEvent.Properties);
             JsonValueFormatter.WriteQuotedJsonString(message, output);
 
-            output.Write(",\"Level\":\"");
+            output.Write(",\"level\":\"");
             output.Write(GetLevel(logEvent.Level));
             output.Write('\"');
 
             if (logEvent.Exception != null)
             {
-                output.Write(",\"Exception\":");
+                output.Write(",\"exception\":");
                 JsonValueFormatter.WriteQuotedJsonString(logEvent.Exception.ToString(), output);
             }
 
