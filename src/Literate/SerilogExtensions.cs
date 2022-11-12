@@ -103,7 +103,7 @@ namespace Serilog
         /// <returns><see cref="LoggerConfiguration"/></returns>
         public static LoggerConfiguration ConfigueFile(this LoggerSinkConfiguration configuration,
             string outputTemplate = DefaultOutputTemplate,
-            bool shared = true,
+            bool shared = false,
             bool buffered = false,
             int retainedFileCountLimit = 100,
             int fileSizeLimitBytes = 1073741824,
@@ -149,7 +149,7 @@ namespace Serilog
         [Obsolete("Use ConfigueFile")]
         public static LoggerConfiguration ConfigueRollingFile(this LoggerSinkConfiguration configuration,
             string outputTemplate = DefaultOutputTemplate,
-            bool shared = true,
+            bool shared = false,
             bool buffered = false,
             int retainedFileCountLimit = 100,
             int fileSizeLimitBytes = 1073741824,
@@ -193,7 +193,7 @@ namespace Serilog
         /// <returns><see cref="LoggerConfiguration"/></returns>
         public static LoggerConfiguration ConfigueFile(this LoggerSinkConfiguration configuration,
             ITextFormatter formatter,
-            bool shared = true,
+            bool shared = false,
             bool buffered = false,
             int retainedFileCountLimit = 100,
             int fileSizeLimitBytes = 1073741824,
@@ -236,7 +236,7 @@ namespace Serilog
         
         public static LoggerConfiguration ConfigueRollingFile(this LoggerSinkConfiguration configuration,
             ITextFormatter formatter,
-            bool shared = true,
+            bool shared = false,
             bool buffered = false,
             int retainedFileCountLimit = 100,
             int fileSizeLimitBytes = 1073741824,
